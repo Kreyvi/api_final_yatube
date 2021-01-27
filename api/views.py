@@ -1,20 +1,20 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, status, viewsets
+from rest_framework import filters, viewsets
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, \
+from rest_framework.permissions import (
+    IsAuthenticated,
     IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
+)
 
-from api.models import Follow, Group, Post, User
+from api.models import Group, Post
 from api.permissions import IsAuthorOrReadOnly
-from api.serializers import CommentSerializer, FollowSerializer, \
-    GroupSerializer, PostSerializer
+from . import serializers
 
 
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = serializers.PostSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['group', ]
 
@@ -23,7 +23,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    serializer_class = CommentSerializer
+    serializer_class = serializers.CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def get_queryset(self):
@@ -42,15 +42,16 @@ class CommentViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+    serializer_class = serializers.GroupSerializer
 
 
 class FollowViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-    serializer_class = FollowSerializer
+    serializer_class = serializers.FollowSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['following']
+    search_fields = ['user__username']
 
     def get_queryset(self):
-        queryset = Follow.objects.filter(following=self.request.user)
+        user = self.request.user
+        queryset = user.following
         return queryset

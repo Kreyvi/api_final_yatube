@@ -36,24 +36,26 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class FollowSerializer(serializers.ModelSerializer):
     following = serializers.SlugRelatedField(
-        read_only=False,
         slug_field='username',
         queryset=User.objects.all(),
     )
     user = serializers.SlugRelatedField(
-        read_only=True,
         slug_field='username',
+        queryset=User.objects.all(),
+        default=fields.CurrentUserDefault()
     )
+
+    def validate(self, data):
+        if data['user'] == data['following']:
+            raise serializers.ValidationError('Not')
+        return data
 
     class Meta:
         fields = '__all__'
         model = Follow
-        lookup_field = ('username',)
         validators = [
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
-                fields=('user', 'following')
-            )
+                fields=('user', 'following'),
+            ),
         ]
-
-
