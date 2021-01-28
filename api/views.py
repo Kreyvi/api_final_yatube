@@ -40,7 +40,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Group.objects.all()
     serializer_class = serializers.GroupSerializer
 
