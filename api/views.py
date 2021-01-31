@@ -1,13 +1,9 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
 from rest_framework.generics import get_object_or_404
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, \
-    RetrieveModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.permissions import (
-    IsAuthenticated,
     IsAuthenticatedOrReadOnly
 )
-from rest_framework.viewsets import GenericViewSet
 
 from api.models import Group, Post
 from api.permissions import IsAuthorOrReadOnly

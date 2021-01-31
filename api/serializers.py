@@ -28,7 +28,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
     class Meta:
         fields = '__all__'
         model = Group
@@ -46,8 +45,8 @@ class FollowSerializer(serializers.ModelSerializer):
     )
 
     def validate(self, data):
-        if self.context['request'].method == 'POST' and \
-                data['user'] == data['following']:
+        if (self.context['request'].method == 'POST'
+                and data['user'] == data['following']):
             raise serializers.ValidationError(
                 'You are trying to follow yourself!'
             )

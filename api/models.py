@@ -14,7 +14,6 @@ class Group(models.Model):
     )
     slug = models.SlugField(
         max_length=50,
-        # unique=True,
         blank=True,
         null=False,
 
