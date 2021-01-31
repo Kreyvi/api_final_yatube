@@ -10,11 +10,12 @@ class Group(models.Model):
         max_length=200,
         verbose_name='Заголовок',
         help_text='Введите название группы',
+        unique=True
     )
     slug = models.SlugField(
         max_length=50,
-        unique=True,
-        blank=False,
+        # unique=True,
+        blank=True,
         null=False,
 
     )
