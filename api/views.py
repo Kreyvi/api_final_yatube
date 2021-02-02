@@ -8,6 +8,7 @@ from rest_framework.permissions import (
 from api.models import Group, Post
 from api.permissions import IsAuthorOrReadOnly
 from . import serializers
+from .viewsets import ListCreateViewSet
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -37,16 +38,16 @@ class CommentViewSet(viewsets.ModelViewSet):
         )
 
 
-class GroupViewSet(viewsets.GenericViewSet, CreateModelMixin, ListModelMixin):
+class GroupViewSet(ListCreateViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Group.objects.all()
     serializer_class = serializers.GroupSerializer
 
 
-class FollowViewSet(viewsets.GenericViewSet, CreateModelMixin, ListModelMixin):
+class FollowViewSet(ListCreateViewSet):
     serializer_class = serializers.FollowSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['user__username']
+    search_fields = ['=user__username']
 
     def get_queryset(self):
         user = self.request.user
