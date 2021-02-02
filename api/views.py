@@ -1,6 +1,5 @@
 from rest_framework import filters, viewsets
 from rest_framework.generics import get_object_or_404
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly
 )
